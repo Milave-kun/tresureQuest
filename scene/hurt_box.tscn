@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpb0o0v726m08"]
+
+[ext_resource type="Script" path="res://script/hurt_box.gd" id="1_41dk0"]
+
+[node name="HurtBox" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_41dk0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="DisabledTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="DisabledTimer" to="." method="_on_disabled_timer_timeout"]

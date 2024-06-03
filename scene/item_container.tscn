@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjqftkal8rlgo"]
+
+[ext_resource type="Texture2D" uid="uid://dd5cjby66agd2" path="res://art/GUI/EmptyItem.png" id="1_1dr2y"]
+[ext_resource type="Script" path="res://script/item_container.gd" id="2_d1j3s"]
+
+[node name="ItemContainer" type="TextureRect"]
+offset_right = 12.0
+offset_bottom = 12.0
+texture = ExtResource("1_1dr2y")
+script = ExtResource("2_d1j3s")
+
+[node name="ItemTexture" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 36.0
+offset_bottom = 36.0
+scale = Vector2(0.33, 0.33)

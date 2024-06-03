@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=3 uid="uid://7wdwkxb6emro"]
+
+[ext_resource type="Script" path="res://script/item_options.gd" id="1_h4i13"]
+[ext_resource type="Texture2D" uid="uid://bjwkmws2u6ply" path="res://art/weapons/bow.png" id="2_pcsmk"]
+[ext_resource type="FontFile" uid="uid://c76wc65k8qb4p" path="res://Font/tenderness.otf" id="2_umbxx"]
+
+[node name="ItemOptions" type="ColorRect"]
+custom_minimum_size = Vector2(380, 110)
+anchors_preset = -1
+anchor_right = 0.317
+anchor_bottom = 0.1
+offset_right = -0.399994
+offset_bottom = 40.0
+color = Color(0.544974, 0.544974, 0.544974, 1)
+script = ExtResource("1_h4i13")
+
+[node name="Button" type="TextureButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 380.0
+offset_bottom = 121.0
+mouse_filter = 1
+
+[node name="ColorRect" type="ColorRect" parent="Button"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 43.0
+offset_bottom = 43.0
+color = Color(0, 0, 0, 1)
+
+[node name="ItemIcon" type="TextureRect" parent="Button/ColorRect"]
+layout_mode = 0
+offset_right = 38.0
+offset_bottom = 38.0
+texture = ExtResource("2_pcsmk")
+
+[node name="lbl_name" type="Label" parent="Button"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 9.0
+offset_right = 116.0
+offset_bottom = 41.0
+theme_override_fonts/font = ExtResource("2_umbxx")
+theme_override_font_sizes/font_size = 28
+text = "Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="lbl_description" type="Label" parent="Button"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 49.0
+offset_right = 374.0
+offset_bottom = 111.0
+theme_override_fonts/font = ExtResource("2_umbxx")
+theme_override_font_sizes/font_size = 16
+text = "Description of Item
+"
+autowrap_mode = 3
+
+[node name="lbl_level" type="Label" parent="Button"]
+layout_mode = 0
+offset_left = 303.0
+offset_top = 5.0
+offset_right = 375.0
+offset_bottom = 39.0
+theme_override_fonts/font = ExtResource("2_umbxx")
+theme_override_font_sizes/font_size = 22
+text = "Level: 1"
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="selected_upgrade" from="." to="." method="_on_selected_upgrade"]
+[connection signal="pressed" from="Button" to="." method="_on_texture_button_pressed"]

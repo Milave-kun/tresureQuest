@@ -1,0 +1,90 @@
+[gd_scene load_steps=12 format=3 uid="uid://corq61xa07cnw"]
+
+[ext_resource type="Script" path="res://script/slime.gd" id="1_88i7i"]
+[ext_resource type="Texture2D" uid="uid://dbfiptw4myl64" path="res://art/character/kolbold_strong.png" id="2_37ncu"]
+[ext_resource type="PackedScene" uid="uid://bpb0o0v726m08" path="res://scene/hurt_box.tscn" id="3_r7c1i"]
+[ext_resource type="PackedScene" uid="uid://gd4bkwevvl8j" path="res://scene/hit_box.tscn" id="4_pnrsi"]
+[ext_resource type="AudioStream" uid="uid://xdophs66dojv" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_rc7nc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xc4f6"]
+atlas = ExtResource("2_37ncu")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_op5ug"]
+atlas = ExtResource("2_37ncu")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rlvwg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xc4f6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_op5ug")
+}],
+"loop": true,
+"name": &"move",
+"speed": 2.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_osa5r"]
+radius = 7.0
+height = 20.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1d3xl"]
+size = Vector2(24, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7tgib"]
+size = Vector2(14, 21)
+
+[node name="Kobold" type="CharacterBody2D"]
+collision_layer = 5
+collision_mask = 5
+script = ExtResource("1_88i7i")
+experience = 3
+health = 30
+enemy_damage = 5
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+sprite_frames = SubResource("SpriteFrames_rlvwg")
+animation = &"move"
+frame_progress = 0.375536
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 2)
+shape = SubResource("CapsuleShape2D_osa5r")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+
+[node name="pathfinder" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="HurtBox" parent="." instance=ExtResource("3_r7c1i")]
+collision_layer = 4
+collision_mask = 4
+HurtBoxType = 1
+
+[node name="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_1d3xl")
+
+[node name="HitBox" parent="." instance=ExtResource("4_pnrsi")]
+collision_layer = 2
+
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_7tgib")
+
+[node name="snd_hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_rc7nc")
+volume_db = -20.0
+
+[connection signal="timeout" from="pathfinder" to="." method="_on_pathfinder_timeout"]
+[connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
+
+[editable path="HurtBox"]
+[editable path="HitBox"]

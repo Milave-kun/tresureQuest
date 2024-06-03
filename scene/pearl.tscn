@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://ckdierjt3ffqh"]
+
+[ext_resource type="Script" path="res://script/pearl.gd" id="1_vpnfs"]
+[ext_resource type="Texture2D" uid="uid://ybulgtbvlxx1" path="res://art/weapons/arrow_01e.png" id="2_8ueh6"]
+[ext_resource type="AudioStream" uid="uid://v62c1lmv4jhj" path="res://Audio/SoundEffect/ice.wav" id="3_gsnue"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yboe7"]
+size = Vector2(11.3137, 46.6691)
+
+[node name="Pearl" type="Area2D" groups=["attack"]]
+top_level = true
+scale = Vector2(0.5, 0.5)
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("1_vpnfs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_8ueh6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2.5, -2.5)
+rotation = -0.785398
+shape = SubResource("RectangleShape2D_yboe7")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_gsnue")
+volume_db = -10.0
+pitch_scale = 5.0
+autoplay = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,0 +1,91 @@
+[gd_scene load_steps=12 format=3 uid="uid://ccfev4bs5ad6i"]
+
+[ext_resource type="Script" path="res://script/slime.gd" id="1_8ppve"]
+[ext_resource type="Texture2D" uid="uid://dbdrawh8of8or" path="res://art/character/cyclops.png" id="2_d6v7s"]
+[ext_resource type="PackedScene" uid="uid://bpb0o0v726m08" path="res://scene/hurt_box.tscn" id="3_e6kba"]
+[ext_resource type="PackedScene" uid="uid://gd4bkwevvl8j" path="res://scene/hit_box.tscn" id="4_stb5q"]
+[ext_resource type="AudioStream" uid="uid://xdophs66dojv" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_p38gj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsp7q"]
+atlas = ExtResource("2_d6v7s")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_allpq"]
+atlas = ExtResource("2_d6v7s")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rlvwg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lsp7q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_allpq")
+}],
+"loop": true,
+"name": &"move",
+"speed": 2.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n7pwk"]
+radius = 6.5
+height = 19.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1d3xl"]
+size = Vector2(30, 30.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7tgib"]
+size = Vector2(18, 22)
+
+[node name="Cyclops" type="CharacterBody2D"]
+collision_layer = 5
+collision_mask = 5
+script = ExtResource("1_8ppve")
+experience = 5
+health = 70
+move_speed = 45.0
+knockback_recovery = 5.0
+enemy_damage = 8
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+sprite_frames = SubResource("SpriteFrames_rlvwg")
+animation = &"move"
+frame_progress = 0.6424
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, -1)
+shape = SubResource("CapsuleShape2D_n7pwk")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+
+[node name="pathfinder" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="HurtBox" parent="." instance=ExtResource("3_e6kba")]
+collision_layer = 4
+collision_mask = 4
+HurtBoxType = 1
+
+[node name="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2(0, 0.25)
+shape = SubResource("RectangleShape2D_1d3xl")
+
+[node name="HitBox" parent="." instance=ExtResource("4_stb5q")]
+collision_layer = 2
+
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+shape = SubResource("RectangleShape2D_7tgib")
+
+[node name="snd_hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_p38gj")
+volume_db = -20.0
+
+[connection signal="timeout" from="pathfinder" to="." method="_on_pathfinder_timeout"]
+[connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
+
+[editable path="HurtBox"]
+[editable path="HitBox"]
